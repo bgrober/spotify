@@ -7,7 +7,6 @@
 - [ ] Answer the questions below before starting your project
 
 ### Pitch the idea in 1 sentence
-
 Use data to find training partners that are at the same fitness level.
 
 ### What's the problem you're solving?
