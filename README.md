@@ -30,6 +30,6 @@ Replace this text with your answer
 
 Replace this text with your answer
 
-### What's the least important feature? (edited)
+### What's the least important feature?
 
 Replace this text with your answer
