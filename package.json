@@ -6,7 +6,7 @@
   "scripts": {
     "start-server": "nodemon server/server.js",
     "start": "npm run start-server;",
-    "postgresql-run": "export NODE_ENV='postgresql-run'; node database/user_database.js",
+    "postgresql-run": "export NODE_ENV='postgresql-run'; node database/user_database.js; node  database/activities_database.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "jest": {
