@@ -2,62 +2,25 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var _ = require('lodash');
+var STRAVA_ACCESS_TOKEN = '85e9e7d17d8d442edb90a8f7c112dfce2de6a7b4';
+var STRAVA_CLIENT_ID = '8506';
+var STRAVA_CLIENT_SECRET = 'e811e15087ce614ae212c85876706235a7bc1d41';
+var ProfileBox = require('./profileBox.jsx');
+var ActivityBox = require('./activityBox.jsx');
 
-// tutorial1.js
-var Box = React.createClass({
-
-
-  render: function() {
-    return (
-      <button onClick={this.props.handleClick} className="box" style={{height:'100px',width:'100px'}}>
-        {this.props.char}
-      </button>
-    );
-  }
-});
-var Row = React.createClass({
-
-  render: function() {
-    return (
-      <div className="row">
-        <Box key="0"  handleClick={this.props.handleClick} char={this.props.data[0]}/>
-        <Box key='1'  handleClick={this.props.handleClick} char={this.props.data[1]}/>
-        <Box key='2'  handleClick={this.props.handleClick} char={this.props.data[2]}/>
-      </div>
-
-    )
-  }
-})
-
-var Board = React.createClass({
-  getInitialState: function() {
-    return {winCheck: [
-       ['-','-','-'],
-       ['-','-','-'],
-       ['-','-','-']
-     ]
+var App = React.createClass({
+    render: function() {
+      return (
+        <div >
+          <ProfileBox  url="https://www.strava.com/api/v3/athlete?per_page=1&access_token=85e9e7d17d8d442edb90a8f7c112dfce2de6a7b4&callback=?"/>
+          <ActivityBox url="https://www.strava.com/api/v3/activities?page=2&per_page=200&access_token=85e9e7d17d8d442edb90a8f7c112dfce2de6a7b4&callback=?"/>
+        </div>
+      );
     }
-  },
-  tick: function (arg,param){
-    // debugger;
-    var rowClicked = param.charAt(4)
-    var boxClicked = param.charAt(7)
-    if(this.state.winCheck[rowClicked][boxClicked] === 'X') this.state.winCheck[rowClicked][boxClicked] = 'O'
-    else this.state.winCheck[rowClicked][boxClicked] = 'X'
-    this.setState ({winCheck: this.state.winCheck})
-  },
+});
 
-  render: function() {
-    return (
-      <div className="board">
-        <Row key='0' handleClick={this.tick} data={this.state.winCheck[0]}/>
-        <Row key='1' handleClick={this.tick} data={this.state.winCheck[1]}/>
-        <Row key='2' handleClick={this.tick} data={this.state.winCheck[2]}/>
-      </div>
-    )
-  }
-})
 ReactDOM.render(
-  <Board />,
+  <App />,
   document.body
 );
