@@ -64,8 +64,8 @@ passport.use(new StravaStrategy({
 ));
 
 // configure Express
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
+  // app.set('views', __dirname + '/views');
+  // app.set('view engine', 'ejs');
   app.use(cookieParser());
   app.use(bodyParser.urlencoded());
   app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
@@ -76,8 +76,8 @@ passport.use(new StravaStrategy({
   app.use(express.static(path.join(__dirname, './../build')));
 
 //get request to homescreen
-app.get('/', function(req, res){
-  console.log('hello');
+// app.get('/', function(req, res){
+
 //   // console.log(req.user);
 //   if(!req.user) return res.redirect('/login');
 //   else {
@@ -90,7 +90,7 @@ app.get('/', function(req, res){
 //       }
 //     });
 //   }
-});
+// });
 
 app.get('/account', ensureAuthenticated, function(req, res){
 

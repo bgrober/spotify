@@ -7,14 +7,13 @@ var ActivityBox = require('./activityBox.jsx');
 var SignInBox = require('./signin.js');
 var SignInHeader = require('./SignInHeader.js');
 
+
 var App = React.createClass({
-  url: __dirname,
   render: function() {
     // console.log(url);
     return (
       <div >
         <SignInBox/>
-        <ActivityBox/>
       </div>
     );
   }
