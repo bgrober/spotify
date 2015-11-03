@@ -8,16 +8,12 @@ var SignInBox = require('./signin.js');
 var SignInHeader = require('./SignInHeader.js');
 
 var App = React.createClass({
-  getInitialState: function() {
-    return(
-      username: false,
-
-    );
-  },
+  url: __dirname,
   render: function() {
+    // console.log(url);
     return (
       <div >
-        <ProfileBox/>
+        <SignInBox/>
         <ActivityBox/>
       </div>
     );
@@ -26,5 +22,5 @@ var App = React.createClass({
 
 ReactDOM.render(
   <App />,
-  document.getElementByID('container');
+  document.getElementById('container')
 );
