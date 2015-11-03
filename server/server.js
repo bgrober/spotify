@@ -5,7 +5,7 @@ var passport = require('passport');
 var util = require('util');
 var StravaStrategy = require('passport-strava').Strategy;
 var bodyParser  = require('body-parser');
-var  http = require('http');
+var http = require('http');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var migrateUsers = require('../database/user_database.js');
@@ -94,13 +94,13 @@ passport.use(new StravaStrategy({
 
 app.get('/account', ensureAuthenticated, function(req, res){
 
-  // res.render('account', { user: req.user });
+  res.render('../server/views/account', { user: req.user });
 });
 
-app.get('/login', function(req, res){
-  // console.log(req.user)
-  res.render('login', { user: req.user });
-});
+// app.get('/login', function(req, res){
+//   // console.log(req.user)
+//   res.render('login', { user: req.user });
+// });
 
 // GET /auth/strava
 //   Use passport.authenticate() as route middleware to authenticate the
