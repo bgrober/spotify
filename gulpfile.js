@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
 var reactify = require('reactify');
+var babelify = require('babelify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var notify = require('gulp-notify');
@@ -19,7 +20,9 @@ function buildScript(file, watch) {
   var props = {
     entries : ['./src/' + file],
     debug : true,
-    transform : [reactify]
+    transform : babelify.configure({
+                presets: ["react", "es2015"]
+                })
   };
 
   //watchify if watch set to true. otherwise browserify once
@@ -45,10 +48,10 @@ function buildScript(file, watch) {
 
 // run once
 gulp.task('scripts', function() {
-  return buildScript('app.jsx', false);
+  return buildScript('app.js', false);
 });
 
 // run 'scripts' task first, then watch for future changes
 gulp.task('default', ['scripts'], function() {
-  return buildScript('app.jsx', true);
+  return buildScript('app.js', true);
 });

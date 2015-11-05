@@ -24,9 +24,11 @@ var users = sequelize.define('users', {
   country: Sequelize.STRING,
   sex: Sequelize.STRING,
   email: Sequelize.STRING,
-  average_speed: Sequelize.FLOAT,
+  average_speed: Sequelize.STRING,
   average_distance: Sequelize.FLOAT
 });
+
+// users.sync();
 
 //Sync User table with information from Strava, if User exists do nothing, else create new user.
 var syncUsers = function(data) {
@@ -56,4 +58,16 @@ var syncUsers = function(data) {
   });
 };
 
-module.exports = {userModel: users, syncUserModel: syncUsers};
+var allUsers = function(data, req, res) {
+  users
+  .findAll({
+    //  where: {
+    //     user_id: {$ne: data},
+    //  }
+  })
+  .then(function(result) {
+    res.send(result);
+  });
+};
+
+module.exports = {userModel: users, syncUserModel: syncUsers, findAll: allUsers};

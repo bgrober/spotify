@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 var Users = require('./user_database.js');
+var Pace = require('./pace');
 
 var sequelize = new Sequelize('Run_Users', 'brian', 'runs', {
   host: 'localhost',
@@ -88,6 +89,8 @@ var updateAverageSpeed = function(data) {
       // prev.dataValues.average_speed + curr.dataValues.average_speed;
     });
     var averageSpeed = totalSpeed/totalCount;
+    //convert to minutes/mile
+    averageSpeed = Pace(+averageSpeed);
     Users.userModel.update(
       {average_speed: averageSpeed},
       {where: {user_id: data.athlete.id}}
@@ -98,4 +101,16 @@ var updateAverageSpeed = function(data) {
   });
 };
 
-module.exports = {syncFunction: syncActivities, updateAverage: updateAverageSpeed};
+var allActivities = function(data, req, res) {
+  activities
+  .findAll({
+     where: {
+        user_id: data,
+     }
+  })
+  .then(function(result) {
+    res.send(result);
+  });
+};
+
+module.exports = {model: activities, syncFunction: syncActivities, updateAverage: updateAverageSpeed, findAll: allActivities};
