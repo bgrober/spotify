@@ -6,12 +6,15 @@ var express = require('express'),
     passport = require('passport'),
     swig = require('swig'),
     SpotifyStrategy = require('./passport-spotify/index').Strategy;
+    cookieController = require('./cookieController');
+    SpotifiyWebApi = require('spotify-web-api-node');
+
 
 var consolidate = require('consolidate');
 
 var appKey = 'f0161a5f2d4944f38e82d4d91f0505b6';
 var appSecret = 'af63f3edc29d44a4b7735fb207344a88';
-
+var ACCESSTOKEN = '';
 // clientId: 'f0161a5f2d4944f38e82d4d91f0505b6',
 // clientSecert: 'af63f3edc29d44a4b7735fb207344a88',
 // redirect: 'http://127.0.0.1:3000'
@@ -31,7 +34,11 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-
+var spotify = new SpotifiyWebApi({
+	clientId: 'f0161a5f2d4944f38e82d4d91f0505b6',
+	clientSecert: 'af63f3edc29d44a4b7735fb207344a88',
+	redirect: 'http://127.0.0.1:3000'
+});
 // Use the SpotifyStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and spotify
@@ -39,9 +46,12 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new SpotifyStrategy({
   clientID: appKey,
   clientSecret: appSecret,
-  callbackURL: 'http://localhost:8888/callback'
+  callbackURL: 'http://127.0.0.1:3000/callback'
   },
   function(accessToken, refreshToken, profile, done) {
+    ACCESSTOKEN = accessToken;
+    spotify.setAccessToken(ACCESSTOKEN);
+    spotify.createPlaylist('will', 'New Playlist', {public: true})
     // asynchronous verification, for effect...
     process.nextTick(function () {
       // To keep the example simple, the user's spotify profile is returned to
@@ -75,13 +85,36 @@ app.get('/', function(req, res){
   res.sendFile('index.html');
 });
 
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account.html', { user: req.user });
+app.post('/addartist', function(req, res){
+  console.log(req.body);
+  spotify.getArtistTopTracks(data, 'US')
+	.then(function(data) {
+
+		//add the tracks to the playlist
+		spotifyApi.addTracksToPlaylist('thelinmichael',
+			playlist,
+			["spotify:track:", "spotify:track:"])
+				.then(function(data) {
+					console.log('Added tracks to playlist!');
+				}, function(err) {
+					console.log('Something went wrong!', err);
+				});
+
+
+	}, function(err) {
+		console.error(err);
+	});
 });
 
-app.get('/login', function(req, res){
-  res.render('login.html', { user: req.user });
-});
+
+
+// app.get('/account', ensureAuthenticated, cookieController.setSSIDCookie, function(req, res){
+//   res.render('account.html', { user: req.user });
+// });
+//
+// app.get('/login', function(req, res){
+//   res.render('login.html', { user: req.user });
+// });
 
 // GET /auth/spotify
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -89,7 +122,7 @@ app.get('/login', function(req, res){
 //   the user to spotify.com. After authorization, spotify will redirect the user
 //   back to this application at /auth/spotify/callback
 app.get('/auth/spotify',
-  passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'], showDialog: true}),
+  passport.authenticate('spotify', {scope: ['playlist-modify-private', 'playlist-modify-public'], showDialog: true}),
   function(req, res){
 // The request will be redirected to spotify for authentication, so this
 // function will not be called.

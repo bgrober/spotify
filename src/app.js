@@ -13,11 +13,13 @@ var App = React.createClass({
     }
   },
 
-  postArtist() {
+  postArtist(e, input) {
+    // debugger;
+    console.log('hello');
     $.ajax({
       type: 'POST',
-      url: '/auth',
-      data: this.refs.artist.getDOMNode().value,
+      url: '/addartist',
+      data: 'radiohead',
       success: resp => {
         this.setState({
           activities: resp
