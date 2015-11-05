@@ -9,7 +9,7 @@ var SearchField = require('./searchField');
 var App = React.createClass({
   getInitialState() {
     return {
-      loggedIn: true,
+      loggedIn: document.cookie !=='',
     }
   },
 

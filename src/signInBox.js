@@ -5,8 +5,8 @@ var SignInBox = React.createClass({
   render() {
     return (
       <div>
-        <a href="http://localhost:3000/auth/">
-          <img src="./spotify.png"/>  
+        <a href="http://localhost:3000/auth/spotify">
+          <img src="./spotify.png"/>
         </a>
       </div>
     );
