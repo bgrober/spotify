@@ -5,7 +5,9 @@ var SignInBox = React.createClass({
   render() {
     return (
       <div>
-        <a href="http://localhost:3000/auth/strava"><img src="./build/img/ConnectWithStrava.jpg"/></a>
+        <a href="http://localhost:3000/auth/">
+          <img src="./spotify.png"/>  
+        </a>
       </div>
     );
   }

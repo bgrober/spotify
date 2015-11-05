@@ -1,0 +1,30 @@
+*{
+	text-align: center;
+	background-color: black;
+}
+
+.field{
+	position: fixed; /* or absolute */
+	top: 50%;
+	left: 20%;
+	width: 60%
+}
+
+
+
+.search{
+	opacity: .5;
+	width: 100%;
+	height: 50px;
+	margin: auto;
+	border: 3px solid #7ab800;
+	color: #7ab800;
+	font-size: 16px;
+	font-family: 'helvetica', 'sans-serif';
+	font-weight: bolder;
+}
+
+.search:focus{
+	outline: 3px solid #7ab800;
+	opacity: .8;
+}
