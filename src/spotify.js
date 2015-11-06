@@ -6,13 +6,9 @@ var SignInBox = require('./signInBox');
 var $ = require('jquery');
 var Playlist = require('./playlist');
 var ArtistSearch = require('./artistSearch');
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-var DefaultRoute = ReactRouter.DefaultRoute;
-var Link = ReactRouter.Link;
+var state = false;
 
-var App = React.createClass({
+var Spotify = React.createClass({
   getInitialState() {
     return {
       loggedIn: document.cookie !=='',
@@ -21,21 +17,19 @@ var App = React.createClass({
   },
 
   updatePlaylistState(input) {
-    console.log('test');
     $.ajax({
       type: 'POST',
       url: '/addplaylist',
       data: input,
       success: resp => {
-        console.log('hello')
-        this.setState({
-          loggedIn: document.cookie !=='',
-          playlist: true
-        });
       },
       error: function(err) {
         console.log(err);
       }
+    });
+    this.setState({
+      loggedIn: document.cookie !=='',
+      playlist: input
     });
   },
   postArtist(input) {
@@ -59,13 +53,9 @@ var App = React.createClass({
           <SignInBox/>) : (!this.state.playlist ?
             (<Playlist submitHandler={this.updatePlaylistState}/>) :
             (<ArtistSearch submitHandler={this.postArtist}/>))}
-
       </div>
     )
   }
 })
 
-
-ReactDOM.render((
-<App/>
-), document.getElementById('container'))
+module.exports = Spotify;

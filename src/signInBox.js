@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 var SignInBox = React.createClass({
   render() {
     return (
-      <div>
+      <div className="field">
         <a href="http://localhost:3000/auth/spotify">
           <img src="./spotify.png"/>
         </a>

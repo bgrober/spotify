@@ -1,7 +1,8 @@
 'use strict';
 var React = require('react');
 var ReactDOM = require('react-dom');
-var SearchField = React.createClass({
+
+var ArtistSearch = React.createClass({
   onUpdate() {
     var value = this.refs.form.value;
     this.props.submitHandler(value);
@@ -9,8 +10,8 @@ var SearchField = React.createClass({
   render() {
     return (
       <div className="searchDiv">
-        <form ref="form" onSubmit={this.onUpdate}>
-          <input className="search" type="text" placeholder="type artist here...">
+        <form onSubmit={this.onUpdate}>
+          <input ref="form" className="search" type="text" placeholder="type artist here...">
           </input>
         </form>
       </div>
@@ -18,4 +19,4 @@ var SearchField = React.createClass({
   }
 });
 
-module.exports = SearchField;
+module.exports = ArtistSearch;

@@ -15,6 +15,8 @@ var consolidate = require('consolidate');
 var appKey = 'f0161a5f2d4944f38e82d4d91f0505b6';
 var appSecret = 'af63f3edc29d44a4b7735fb207344a88';
 var ACCESSTOKEN = '';
+var USERID = '';
+var PLAYLIST = '';
 // clientId: 'f0161a5f2d4944f38e82d4d91f0505b6',
 // clientSecert: 'af63f3edc29d44a4b7735fb207344a88',
 // redirect: 'http://127.0.0.1:3000'
@@ -51,9 +53,10 @@ passport.use(new SpotifyStrategy({
   function(accessToken, refreshToken, profile, done) {
     ACCESSTOKEN = accessToken;
     spotify.setAccessToken(ACCESSTOKEN);
-    spotify.createPlaylist('will', 'New Playlist', {public: true})
+    USERID = profile.username;
     // asynchronous verification, for effect...
     process.nextTick(function () {
+
       // To keep the example simple, the user's spotify profile is returned to
       // represent the logged-in user. In a typical application, you would want
       // to associate the spotify account with a user record in your database,
@@ -84,27 +87,57 @@ app.engine('html', consolidate.swig);
 app.get('/', function(req, res){
   res.sendFile('index.html');
 });
+app.post('/addplaylist', function(req, res){
+  var key = Object.keys(req.body);
+  spotify.getUserPlaylists(USERID)
+    .then(function(data){
+      var lists = data.body.items.map(function(elem, i){
+        return elem.name;
+      });
+      if(lists.some(elem => elem === key[0])){
+        console.log('exist')
+        PLAYLIST = key[0];
+      }
+      else {
+                console.log('non exist')
+        spotify.createPlaylist(USERID, key[0], {public: true})
+        .then(function(data) {
+            PLAYLIST = data.body.id;
+            console.log(USERID, PLAYLIST);
+          });
+      }
+    });
+}),
 
 app.post('/addartist', function(req, res){
-  console.log(req.body);
-  spotify.getArtistTopTracks(data, 'US')
+  var key = Object.keys(req.body);
+    console.log(key);
+  spotify.searchArtists(key[0], 'US')
 	.then(function(data) {
-
-		//add the tracks to the playlist
-		spotifyApi.addTracksToPlaylist('thelinmichael',
-			playlist,
-			["spotify:track:", "spotify:track:"])
-				.then(function(data) {
-					console.log('Added tracks to playlist!');
-				}, function(err) {
-					console.log('Something went wrong!', err);
-				});
-
-
-	}, function(err) {
-		console.error(err);
-	});
+    var artistId = data.body.artists.items[0].id;
+    spotify.getArtistTopTracks(artistId, 'US')
+    .then(function(data) {
+      var uris = data.body.tracks.map(function(song, i){
+        if(i < 5) return song.uri;
+      });
+      uris = uris.slice(0,5);
+      spotify.addTracksToPlaylist(USERID, PLAYLIST, uris)
+      .then(function(data){
+        console.log(data, 'it works!');
+      })
+    });
+  });
 });
+		//add the tracks to the playlist
+		// spotifyApi.addTracksToPlaylist('thelinmichael',
+		// 	playlist,
+		// 	["spotify:track:", "spotify:track:"])
+		// 		.then(function(data) {
+		// 			console.log('Added tracks to playlist!');
+		// 		}, function(err) {
+		// 			console.log('Something went wrong!', err);
+				// });
+
 
 
 
